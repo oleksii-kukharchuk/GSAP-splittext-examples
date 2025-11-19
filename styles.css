@@ -1,0 +1,48 @@
+body {
+  background-color: #d8cacd;
+  background-image: url(./squared-paper-texture.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#container {
+  width: 1024px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+[id^="text-"] {
+  color: #0064b2;
+  font-size: 3em;
+  font-family: "Roboto Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.text-area {
+  margin: 20px;
+  font-size: 1.2em;
+  resize: vertical;
+  min-height: 100px;
+}
+
+button {
+  background: transparent;
+  color: #0064b2;
+  font-size: 1.2em;
+  font-family: "Roboto Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  border: 2px solid #0064b2;
+  padding: 10px 30px;
+}
+
+button:hover {
+  background-color: #0064b2;
+  color: #ffffff;
+  cursor: pointer;
+}

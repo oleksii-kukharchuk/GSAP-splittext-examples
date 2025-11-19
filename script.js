@@ -1,89 +1,53 @@
-const elements = [
-  {
-    id: "text-1",
-    jsCode: `
-    const text1 = new SplitText("#text-1", {
-    type: "chars"
-    }).chars;
-
-    text1.forEach((char, i) => {
-
-    const charTL = gsap.timeline({
-        repeat: -1,
-        yoyo: true
-    });
-
-    charTL.to(char, {
-        yPercent: 4,
-        rotateY: 25,
-        duration: 0.3,
-        ease: "power1.inOut"
-    }).to(char, {
-        yPercent: 0,
-        rotateY: -25,
-        duration: 0.3,
-        ease: "power1.inOut"
-    });
-
-    text1TL.add(charTL, i * -0.05);
-    });
-
-    text1TL.play()`,
-  },
-];
+import elements from "./elements.js";
 
 // Iterate through the elements array
 const container = document.createElement("div");
+container.className = "container";
 
 elements.forEach((element) => {
   // Create a <p> element
   const p = document.createElement("p");
+  const container = document.querySelector("#container");
   p.id = element.id;
-  p.textContent = `Split me baby one more time!`;
+  p.textContent = `${
+    elements.indexOf(element) + 1
+  }. Split me baby one more time!`;
   container.appendChild(p);
 
   // use a script tag or an external JS file
   document.addEventListener("DOMContentLoaded", (event) => {
     gsap.registerPlugin(SplitText);
-    // Animate the <p> element with GSAP
-    const text1 = new SplitText("#text-1", {
-      type: "chars",
-    }).chars;
 
-    text1TL = gsap.timeline();
-
-    text1.forEach((char, i) => {
-      const charTL = gsap.timeline({
-        repeat: -1,
-        yoyo: true,
-      });
-
-      charTL
-        .to(char, {
-          yPercent: 4,
-          rotateY: 25,
-          duration: 0.3,
-          ease: "power1.inOut",
-        })
-        .to(char, {
-          yPercent: 0,
-          rotateY: -25,
-          duration: 0.3,
-          ease: "power1.inOut",
-        });
-
-      text1TL.add(charTL, i * -0.05);
-    });
-
-    text1TL.play();
+    element.animationCode();
   });
 
   // Create a <textarea> element
   const textarea = document.createElement("textarea");
-  textarea.value = element.jsCode;
-  textarea.style.width = "100%";
+  textarea.id = `text-area-${elements.indexOf(element) + 1}`;
+  textarea.className = "text-area";
+  // Convert the function to a string
+  const functionString = element.animationCode.toString();
+
+  // Remove the "() => {}" wrapper
+  const functionBody = functionString
+    .replace(/^\(\)\s*=>\s*{/, "")
+    .replace(/}$/, "");
+  textarea.value = functionBody;
+  textarea.style.width = "500px";
   textarea.style.height = "100px";
   container.appendChild(textarea);
+
+  // Create a div to hold the button and checkmark
+  const buttonContainer = document.createElement("div");
+  buttonContainer.style.display = "flex";
+  buttonContainer.style.alignItems = "center";
+
+  // Create a green checkmark element
+  const checkmark = document.createElement("span");
+  checkmark.textContent = "✔";
+  checkmark.style.color = "green";
+  checkmark.style.marginRight = "10px";
+  checkmark.style.visibility = "hidden"; // Use visibility instead of display
 
   // Create a copy button
   const copyButton = document.createElement("button");
@@ -91,14 +55,22 @@ elements.forEach((element) => {
   copyButton.addEventListener("click", () => {
     textarea.select();
     document.execCommand("copy");
-    alert("Code copied to clipboard!");
-  });
-  container.appendChild(copyButton);
 
-  // Add some spacing
-  const spacer = document.createElement("div");
-  spacer.style.height = "20px";
-  container.appendChild(spacer);
+    // Show the checkmark
+    checkmark.style.visibility = "visible";
+
+    // Hide the checkmark after 2 seconds
+    setTimeout(() => {
+      checkmark.style.visibility = "hidden";
+    }, 2000);
+  });
+
+  // Append the checkmark and button to the button container
+  buttonContainer.appendChild(checkmark);
+  buttonContainer.appendChild(copyButton);
+
+  // Append the button container to the main container
+  container.appendChild(buttonContainer);
 });
 
 document.body.appendChild(container);
